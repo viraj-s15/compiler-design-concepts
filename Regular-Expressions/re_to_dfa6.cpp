@@ -1,14 +1,16 @@
 #include <iostream>
 
+
+// This code is for the following regex: (ab+ba)*
 int state = 0;
 
-void start(char c) {
+void start(char c){
   switch (c) {
-  case '0':
-    state = 1;
-    break;
-  case '1':
+  case 'a':
     state = 2;
+    break;
+  case 'b':
+    state = 3;
     break;
   default:
     state = -1;
@@ -16,11 +18,11 @@ void start(char c) {
 }
 void state1(char c) {
   switch (c) {
-  case '0':
-    state = 0;
+  case 'a':
+    state = 2;
     break;
-  case '1':
-    state = 3;
+  case 'b':
+    state = 1;
     break;
   default:
     state = -1;
@@ -28,11 +30,11 @@ void state1(char c) {
 }
 void state2(char c) {
   switch (c) {
-  case '0':
-    state = 3;
+  case 'a':
+    state = 1;
     break;
-  case '1':
-    state = 0;
+  case 'b':
+    state = 4;
     break;
   default:
     state = -1;
@@ -41,25 +43,29 @@ void state2(char c) {
 
 void state3(char c) {
   switch (c) {
-  case '0':
-    state = 2;
+  case 'a':
+    state = 4;
     break;
-  case '1':
-    state = 1;
+  case 'b':
+    state = 4;
     break;
   default:
     state = -1;
   }
 }
 
+
 int dfa(std::string input) {
   int str_len = input.length();
-  if (input[0] != '0' and input[1] != '1') {
-    std::cout << "The entered symbols are incorrect\n";
-    return 0;
+  for (int i =0; i < str_len; i ++) {
+    if (input[i] != 'a' and input[i] != 'b') {
+      std::cout << "The entered symbols are incorrect\n";
+      return 0;
+    }
   }
 
-  for (int i = 0; i < str_len; i++) {
+
+  for (int i = 0; i < str_len - 1; i++) {
     switch (state) {
     case 0:
       start(input[i]);
@@ -78,7 +84,7 @@ int dfa(std::string input) {
     }
   }
 
-  if (state == 3)
+  if (state == 1)
     return 1;
   return 0;
 }
